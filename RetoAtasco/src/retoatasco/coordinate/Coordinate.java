@@ -14,6 +14,10 @@ public class Coordinate {
 		column = c;
 	}
 	
+	public Coordinate(Coordinate copyCoord) {
+		this(copyCoord.getRow(), copyCoord.getColumn());
+	}
+	
 	public int getRow() {
 		return row;
 	}

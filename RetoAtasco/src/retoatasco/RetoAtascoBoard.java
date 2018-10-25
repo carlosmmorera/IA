@@ -25,8 +25,9 @@ public class RetoAtascoBoard {
 	
 	private static Square[] board;
 	private static Coordinate exit;
-	
 	private static Coordinate[] vehicules;
+	private static int numRows;
+	private static int numColumns;
 	
 	public static Action FORWARD = new DynamicAction("Forward");
 
@@ -36,16 +37,28 @@ public class RetoAtascoBoard {
 		board = new Square[BOARD_SIZE*BOARD_SIZE];
 		exit = new Coordinate();
 		vehicules = new Coordinate[NUM_CAR + NUM_LORRY];
+		numRows = BOARD_SIZE;
+		numColumns = BOARD_SIZE;
 	}
 	
-	//HAY QUE COPIAR TABLERO E INCLUIR LUGAR DE PUERTA y buscar vehículos
-	public RetoAtascoBoard(Square[] b, Coordinate c) {
-		board = b;
-		exit = c;
+	public RetoAtascoBoard(Square[] b, Coordinate c, int nRows, int nColumns,
+			int numVehicules) {
+		board = new Square[b.length];
+		vehicules = new Coordinate[numVehicules];
+		for (int i= 0; i < b.length; ++i) {
+			board[i].setId(b[i].getId());
+			board[i].setPiece(b[i].getPiece());
+			if (b[i].getPiece() != Piece.EMPTY) {
+				vehicules[b[i].getId()].setRow(getRowCoord(i));
+				vehicules[b[i].getId()].setColumn(getColCoord(i));
+			}
+		}
+		exit = new Coordinate(c);
 	}
 	
 	public RetoAtascoBoard(RetoAtascoBoard copyBoard) {
-		this(copyBoard.getBoard(), copyBoard.getExit());
+		this(copyBoard.getBoard(), copyBoard.getExit(), copyBoard.getNumRows(),
+				copyBoard.getNumColumns(), copyBoard.getNumVehicules());
 	}
 	
 	public Square[] getBoard() {
@@ -56,14 +69,33 @@ public class RetoAtascoBoard {
 		return exit;
 	}
 	
+	public int getNumRows() {
+		return numRows;
+	}
+
+	public int getNumColumns() {
+		return numColumns;
+	}
+	
+	public int getNumVehicules() {
+		return vehicules.length;
+	}
+	
 	public Square getValueAt(Coordinate c) {
 		return getValueAt(c.getRow(), c.getColumn());
 	}
 
 	public Coordinate getLocationOf(int id) {
-		return new Coordinate(vehicules[id].getRow(), vehicules[id].getColumn());
+		return vehicules[id];
 	}
-
+	
+	public void moveVehiculeForward(int id) {
+		Coordinate c = new Coordinate(getLocationOf(id));
+		Square s = new Square(getValueAt(c));
+		int vehiculeSize = s.getPiece() == Piece.CAR ? CAR_SIZE : LORRY_SIZE;
+		Coordinate [] v = new Coordinate[vehiculeSize];
+	}
+/*
 	public void moveGapRight() {
 		int gapPos = getGapPosition();
 		int x = getXCoord(gapPos);
@@ -174,36 +206,37 @@ public class RetoAtascoBoard {
 				+ state[3] + " " + state[4] + " " + state[5] + " " + "\n"
 				+ state[6] + " " + state[7] + " " + state[8];
 	}
+*/
 
 	//
 	// PRIVATE METHODS
 	//
-
+	
 	/**
 	 * Note: The graphic representation maps x values on row numbers (x-axis in
 	 * vertical direction).
 	 */
-	private int getXCoord(int absPos) {
-		return absPos / 3;
+	private int getRowCoord(int absPos) {
+		return absPos / numRows;
 	}
 
 	/**
 	 * Note: The graphic representation maps y values on column numbers (y-axis
 	 * in horizontal direction).
 	 */
-	private int getYCoord(int absPos) {
-		return absPos % 3;
+	private int getColCoord(int absPos) {
+		return absPos % numRows;
 	}
 
 	private int getAbsPosition(int x, int y) {
-		return x * BOARD_SIZE + y;
+		return x * numRows + y;
 	}
 
 	private Square getValueAt(int x, int y) {
-		// refactor this use either case or a div/mod soln
 		return board[getAbsPosition(x, y)];
 	}
-
+	
+/*
 	private int getGapPosition() {
 		return getPositionOf(0);
 	}
@@ -219,12 +252,5 @@ public class RetoAtascoBoard {
 		int absPos = getAbsPosition(x, y);
 		state[absPos] = val;
 	}
-
-	public int getNumCar() {
-		return NUM_CAR;
-	}
-
-	public int getNumLorry() {
-		return NUM_LORRY;
-	}
+*/
 }

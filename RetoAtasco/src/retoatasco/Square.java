@@ -17,6 +17,10 @@ public class Square {
 		id = i;
 	}
 	
+	public Square(Square copySquare) {
+		this(copySquare.getPiece(), copySquare.getId());
+	}
+	
 	public boolean isRedCar(Square s) {
 		return s.getId() == ID_RED_CAR;
 	}

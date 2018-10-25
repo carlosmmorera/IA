@@ -14,7 +14,7 @@ import java.util.function.ToDoubleFunction;
  * @author Ciaran O'Reilly
  */
 public class RetoAtascoFunctions {
-
+/*
 	public static final RetoAtascoBoard GOAL_STATE = new RetoAtascoBoard(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 });
 
 	public static List<Action> getActions(RetoAtascoBoard state) {
@@ -55,12 +55,14 @@ public class RetoAtascoFunctions {
 	public static ToDoubleFunction<Node<RetoAtascoBoard, Action>> createMisplacedTileHeuristicFunction() {
 		return new MisplacedTileHeuristicFunction();
 	}
+	*/
 
 	/**
-     * @author Ravi Mohan
-     * @author Ruediger Lunde
-     *
-     */
+	 * @author Carlos Moreno Morera
+	 * @author Pablo Martín Huertas
+	 */
+	
+	/*
     private static class ManhattanHeuristicFunction implements ToDoubleFunction<Node<RetoAtascoBoard, Action>> {
 
         @Override
@@ -109,11 +111,12 @@ public class RetoAtascoFunctions {
             return retVal;
         }
     }
-
+*/
 	/**
-     * @author Ravi Mohan
-     * @author Ruediger Lunde
-     */
+	 * @author Carlos Moreno Morera
+	 * @author Pablo Martín Huertas
+	 */
+	/*
     private  static class MisplacedTileHeuristicFunction implements ToDoubleFunction<Node<RetoAtascoBoard, Action>> {
 
         public double applyAsDouble(Node<RetoAtascoBoard, Action> node) {
@@ -157,4 +160,5 @@ public class RetoAtascoFunctions {
             return numberOfMisplacedTiles;
         }
     }
+    */
 }
