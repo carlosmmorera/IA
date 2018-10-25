@@ -28,7 +28,7 @@ public class RetoAtascoBoard {
 	
 	private static Coordinate[] vehicules;
 	
-	public static Action FOWARD = new DynamicAction("Foward");
+	public static Action FORWARD = new DynamicAction("Forward");
 
 	public static Action BACKWARDS = new DynamicAction("Backwards");
 	
@@ -60,9 +60,8 @@ public class RetoAtascoBoard {
 		return getValueAt(c.getRow(), c.getColumn());
 	}
 
-	public XYLocation getLocationOf(int val) {
-		int absPos = getPositionOf(val);
-		return new XYLocation(getXCoord(absPos), getYCoord(absPos));
+	public Coordinate getLocationOf(int id) {
+		return new Coordinate(vehicules[id].getRow(), vehicules[id].getColumn());
 	}
 
 	public void moveGapRight() {
