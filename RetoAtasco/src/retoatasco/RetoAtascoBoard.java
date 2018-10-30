@@ -7,7 +7,6 @@ import java.util.List;
 
 import aima.core.agent.Action;
 import aima.core.agent.impl.DynamicAction;
-import aima.core.util.datastructure.XYLocation;
 
 
 /**
@@ -18,14 +17,12 @@ import aima.core.util.datastructure.XYLocation;
 public class RetoAtascoBoard {
 
 	private static final int BOARD_SIZE = 6;
-	private static final int LORRY_SIZE = 3;
-	private static final int CAR_SIZE = 2;
 	private static final int NUM_CAR = 6;
 	private static final int NUM_LORRY = 2;
 	
 	private static Square[] board;
 	private static Coordinate exit;
-	private static Coordinate[] vehicules;
+	private static Coordinate[] vehicles;
 	private static int numRows;
 	private static int numColumns;
 	
@@ -36,21 +33,21 @@ public class RetoAtascoBoard {
 	public RetoAtascoBoard() {
 		board = new Square[BOARD_SIZE*BOARD_SIZE];
 		exit = new Coordinate();
-		vehicules = new Coordinate[NUM_CAR + NUM_LORRY];
+		vehicles = new Coordinate[NUM_CAR + NUM_LORRY];
 		numRows = BOARD_SIZE;
 		numColumns = BOARD_SIZE;
 	}
 	
 	public RetoAtascoBoard(Square[] b, Coordinate c, int nRows, int nColumns,
-			int numVehicules) {
+			int numVehicles) {
 		board = new Square[b.length];
-		vehicules = new Coordinate[numVehicules];
+		vehicles = new Coordinate[numVehicles];
 		for (int i= 0; i < b.length; ++i) {
 			board[i].setId(b[i].getId());
 			board[i].setPiece(b[i].getPiece());
 			if (b[i].getPiece() != Piece.EMPTY) {
-				vehicules[b[i].getId()].setRow(getRowCoord(i));
-				vehicules[b[i].getId()].setColumn(getColCoord(i));
+				vehicles[b[i].getId()].setRow(getRowCoord(i));
+				vehicles[b[i].getId()].setColumn(getColCoord(i));
 			}
 		}
 		exit = new Coordinate(c);
@@ -58,7 +55,7 @@ public class RetoAtascoBoard {
 	
 	public RetoAtascoBoard(RetoAtascoBoard copyBoard) {
 		this(copyBoard.getBoard(), copyBoard.getExit(), copyBoard.getNumRows(),
-				copyBoard.getNumColumns(), copyBoard.getNumVehicules());
+				copyBoard.getNumColumns(), copyBoard.getNumVehicles());
 	}
 	
 	public Square[] getBoard() {
@@ -77,8 +74,8 @@ public class RetoAtascoBoard {
 		return numColumns;
 	}
 	
-	public int getNumVehicules() {
-		return vehicules.length;
+	public int getNumVehicles() {
+		return vehicles.length;
 	}
 	
 	public Square getValueAt(Coordinate c) {
@@ -86,14 +83,12 @@ public class RetoAtascoBoard {
 	}
 
 	public Coordinate getLocationOf(int id) {
-		return vehicules[id];
+		return vehicles[id];
 	}
 	
-	public void moveVehiculeForward(int id) {
+	public void moveVehicleForward(int id) {
 		Coordinate c = new Coordinate(getLocationOf(id));
-		Square s = new Square(getValueAt(c));
-		int vehiculeSize = s.getPiece() == Piece.CAR ? CAR_SIZE : LORRY_SIZE;
-		Coordinate [] v = new Coordinate[vehiculeSize];
+		Vehicle v = new Vehicle(this, c);
 	}
 /*
 	public void moveGapRight() {
@@ -235,7 +230,6 @@ public class RetoAtascoBoard {
 	private Square getValueAt(int x, int y) {
 		return board[getAbsPosition(x, y)];
 	}
-	
 /*
 	private int getGapPosition() {
 		return getPositionOf(0);
