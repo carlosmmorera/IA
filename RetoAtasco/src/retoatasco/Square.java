@@ -3,13 +3,14 @@ package retoatasco;
 public class Square {
 	
 	private static final int ID_RED_CAR = 0;
+	private static final int ID_EMPTY = -1;
 	
 	private Piece piece;
 	private int id;
 	
 	public Square() {
 		piece = Piece.EMPTY;
-		id = 0;
+		id = ID_EMPTY;
 	}
 	
 	public Square(Piece p, int i) {
@@ -36,5 +37,12 @@ public class Square {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public boolean isEmpty() {
+		return piece == Piece.EMPTY;
+	}
+	public void setEmpty() {
+		piece = Piece.EMPTY;
+		id = ID_EMPTY;
 	}
 }

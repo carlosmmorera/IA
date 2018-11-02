@@ -2,8 +2,6 @@ package retoatasco;
 
 import retoatasco.coordinate.*;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import aima.core.agent.Action;
 import aima.core.agent.impl.DynamicAction;
@@ -30,13 +28,19 @@ public class RetoAtascoBoard {
 
 	public static Action BACKWARDS = new DynamicAction("Backwards");
 	
-	public RetoAtascoBoard() {
+	/*
+	 * En principio no hace falta este constructor, aunque se podría poner como que por
+	 * defecto generara el puzzle propuesto en la práctica. De hecho, en realidad, solo
+	 * creo que nos hará falta el constructor sin argumentos, pero dejo los otros.
+	 */ 
+	 public RetoAtascoBoard() {
 		board = new Square[BOARD_SIZE*BOARD_SIZE];
 		exit = new Coordinate();
 		vehicles = new Coordinate[NUM_CAR + NUM_LORRY];
 		numRows = BOARD_SIZE;
 		numColumns = BOARD_SIZE;
 	}
+	
 	
 	public RetoAtascoBoard(Square[] b, Coordinate c, int nRows, int nColumns,
 			int numVehicles) {
@@ -86,56 +90,52 @@ public class RetoAtascoBoard {
 		return vehicles[id];
 	}
 	
+	public boolean isEmpty(Coordinate c) {
+		return getValueAt(c).isEmpty();
+	}
+	
 	public void moveVehicleForward(int id) {
-		Coordinate c = new Coordinate(getLocationOf(id));
+		Coordinate c = getLocationOf(id);
 		Vehicle v = new Vehicle(this, c);
+		if (v.canMoveForward(this)) {
+			setEmpty(v.getLastCoordinate());
+			setValue(v.getFirstCoordinate().applyMovement(v.getDirectionForward()), 
+					v.getProperties());
+			vehicles[id] = v.getFirstCoordinate();
+		}
+	}
+	
+	public void moveVehicleBackwards(int id) {
+		Coordinate c = getLocationOf(id);
+		Vehicle v = new Vehicle(this, c);
+		if (v.canMoveBackwards(this)) {
+			setEmpty(v.getFirstCoordinate());
+			setValue(v.getLastCoordinate().applyMovement(v.getDirectionBackwards()),
+					v.getProperties());
+			vehicles[id] = v.getLastCoordinate();
+		}
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o != null && getClass() == o.getClass()) {
+			RetoAtascoBoard aBoard = (RetoAtascoBoard) o;
+			if (aBoard.getNumRows() != numRows || aBoard.getNumColumns() != numColumns
+					|| aBoard.getExit().getRow() != exit.getRow() 
+					|| aBoard.getExit().getColumn() != exit.getColumn())
+				return false;
+			Square[] b = aBoard.getBoard();
+			for (int i = 0; i < numRows*numColumns; i++) {
+				if (board[i].getId() != b[i].getId() || board[i].getPiece() != b[i].getPiece())
+					return false;
+			}
+			return true;
+		}
+		return false;
 	}
 /*
-	public void moveGapRight() {
-		int gapPos = getGapPosition();
-		int x = getXCoord(gapPos);
-		int ypos = getYCoord(gapPos);
-		if (!(ypos == 2)) {
-			int valueOnRight = getValueAt(x, ypos + 1);
-			setValue(x, ypos, valueOnRight);
-			setValue(x, ypos + 1, 0);
-		}
-	}
-
-	public void moveGapLeft() {
-		int gapPos = getGapPosition();
-		int x = getXCoord(gapPos);
-		int ypos = getYCoord(gapPos);
-		if (!(ypos == 0)) {
-			int valueOnLeft = getValueAt(x, ypos - 1);
-			setValue(x, ypos, valueOnLeft);
-			setValue(x, ypos - 1, 0);
-		}
-	}
-
-	public void moveGapDown() {
-		int gapPos = getGapPosition();
-		int x = getXCoord(gapPos);
-		int y = getYCoord(gapPos);
-		if (!(x == 2)) {
-			int valueOnBottom = getValueAt(x + 1, y);
-			setValue(x, y, valueOnBottom);
-			setValue(x + 1, y, 0);
-		}
-
-	}
-
-	public void moveGapUp() {
-		int gapPos = getGapPosition();
-		int x = getXCoord(gapPos);
-		int y = getYCoord(gapPos);
-		if (!(x == 0)) {
-			int valueOnTop = getValueAt(x - 1, y);
-			setValue(x, y, valueOnTop);
-			setValue(x - 1, y, 0);
-		}
-	}
-
 	public List<XYLocation> getPositions() {
 		ArrayList<XYLocation> retVal = new ArrayList<>();
 		for (int i = 0; i < 9; i++) {
@@ -168,21 +168,6 @@ public class RetoAtascoBoard {
 		else if (where.equals(DOWN))
 			retVal = (getXCoord(absPos) != 2);
 		return retVal;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o != null && getClass() == o.getClass()) {
-			RetoAtascoBoard aBoard = (RetoAtascoBoard) o;
-			for (int i = 0; i < 8; i++) {
-				if (this.getPositionOf(i) != aBoard.getPositionOf(i))
-					return false;
-			}
-			return true;
-		}
-		return false;
 	}
 
 	@Override
@@ -230,6 +215,17 @@ public class RetoAtascoBoard {
 	private Square getValueAt(int x, int y) {
 		return board[getAbsPosition(x, y)];
 	}
+	
+	private void setValue(Coordinate c, Square s) {
+		int absPos = getAbsPosition(c.getRow(), c.getColumn());
+		board[absPos].setPiece(s.getPiece());
+		board[absPos].setId(s.getId());
+	}
+	
+	private void setEmpty(Coordinate c) {
+		int absPos = getAbsPosition(c.getRow(), c.getColumn());
+		board[absPos].setEmpty();
+	}
 /*
 	private int getGapPosition() {
 		return getPositionOf(0);
@@ -240,11 +236,6 @@ public class RetoAtascoBoard {
 			if (state[i] == val)
 				return i;
 		return -1;
-	}
-
-	private void setValue(int x, int y, int val) {
-		int absPos = getAbsPosition(x, y);
-		state[absPos] = val;
 	}
 */
 }
