@@ -10,7 +10,7 @@ import retoatasco.coordinate.*;
 public class RetoAtascoBoard {
 	public final int FORWARD_INDEX = 0;
 	public final int BACKWARD_INDEX = 1;
-
+	
 	private static final int BOARD_SIZE = 6;
 	private static final int NUM_CAR = 6;
 	private static final int NUM_LORRY = 2;
@@ -84,6 +84,10 @@ public class RetoAtascoBoard {
 	
 	public boolean isEmpty(Coordinate c) {
 		return getValueAt(c).isEmpty();
+	}
+	
+	public Coordinate getRedCarPosition() {
+		return vehicles[0];
 	}
 	
 	public void moveVehicleForward(int id) {

@@ -86,6 +86,28 @@ public class Coordinate {
 			return Direction.WEST;
 	}
 	
+	public static Direction oppositeDirection(Direction d) {
+		Direction result;
+		if (d == Direction.NORTH)
+			result = Direction.SOUTH;
+		else if (d == Direction.EAST)
+			result = Direction.WEST;
+		else if (d == Direction.SOUTH)
+			result = Direction.NORTH;
+		else
+			result = Direction.EAST;
+		return result;
+	}
+	
+	public static Direction perpendicularDirection(Direction d) {
+		Direction result;
+		if (d == Direction.NORTH || d == Direction.SOUTH)
+			result = Direction.EAST;
+		else
+			result = Direction.NORTH;
+		return result;
+	}
+	
 	public static void orderCoordinates(ArrayList<Coordinate> l){
 		Collections.sort(l, new Comparator<Coordinate>() {
 			@Override
