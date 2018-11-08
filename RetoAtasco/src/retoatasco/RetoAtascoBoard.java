@@ -2,17 +2,14 @@ package retoatasco;
 
 import retoatasco.coordinate.*;
 
-
-import aima.core.agent.Action;
-import aima.core.agent.impl.DynamicAction;
-
-
 /**
  * @author Carlos Moreno Morera
  * @author Pablo Martín Huertas
  */
 
 public class RetoAtascoBoard {
+	public final int FORWARD_INDEX = 0;
+	public final int BACKWARD_INDEX = 1;
 
 	private static final int BOARD_SIZE = 6;
 	private static final int NUM_CAR = 6;
@@ -24,14 +21,9 @@ public class RetoAtascoBoard {
 	private static int numRows;
 	private static int numColumns;
 	
-	public static Action FORWARD = new DynamicAction("Forward");
-
-	public static Action BACKWARDS = new DynamicAction("Backwards");
-	
 	/*
 	 * En principio no hace falta este constructor, aunque se podría poner como que por
-	 * defecto generara el puzzle propuesto en la práctica. De hecho, en realidad, solo
-	 * creo que nos hará falta el constructor sin argumentos, pero dejo los otros.
+	 * defecto generara el puzzle propuesto en la práctica.
 	 */ 
 	 public RetoAtascoBoard() {
 		board = new Square[BOARD_SIZE*BOARD_SIZE];
@@ -114,6 +106,15 @@ public class RetoAtascoBoard {
 					v.getProperties());
 			vehicles[id] = v.getLastCoordinate();
 		}
+	}
+	
+	public boolean[] canMoveVehicle(int id){
+		boolean[] movement = new boolean[2];
+		Coordinate c = getLocationOf(id);
+		Vehicle v = new Vehicle(this, c);
+		movement[FORWARD_INDEX] = v.canMoveForward(this);
+		movement[BACKWARD_INDEX] = v.canMoveBackwards(this);
+		return movement;
 	}
 	
 	@Override

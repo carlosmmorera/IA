@@ -22,8 +22,8 @@ public class Square {
 		this(copySquare.getPiece(), copySquare.getId());
 	}
 	
-	public boolean isRedCar(Square s) {
-		return s.getId() == ID_RED_CAR;
+	public boolean isRedCar() {
+		return id == ID_RED_CAR;
 	}
 	
 	public Piece getPiece() {

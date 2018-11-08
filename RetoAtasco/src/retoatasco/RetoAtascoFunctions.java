@@ -1,53 +1,45 @@
 package retoatasco;
 
 import aima.core.agent.Action;
-import aima.core.search.framework.Node;
-import aima.core.util.datastructure.XYLocation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.ToDoubleFunction;
+import java.util.Objects;
 
 /**
- * @author Ruediger Lunde
- * @author Ravi Mohan
- * @author Ciaran O'Reilly
+ * @author Pablo Martín Huertas
+ * @author Carlos Moreno Morera
  */
 public class RetoAtascoFunctions {
-/*
-	public static final RetoAtascoBoard GOAL_STATE = new RetoAtascoBoard(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 });
-
 	public static List<Action> getActions(RetoAtascoBoard state) {
-		List<Action> actions = new ArrayList<>(2*state.getNumCar() + 2*state.getNumLorry());
-		
-		
-
-		if (state.canMoveGap(RetoAtascoBoard.UP))
-			actions.add(RetoAtascoBoard.UP);
-		if (state.canMoveGap(RetoAtascoBoard.DOWN))
-			actions.add(RetoAtascoBoard.DOWN);
-		if (state.canMoveGap(RetoAtascoBoard.LEFT))
-			actions.add(RetoAtascoBoard.LEFT);
-		if (state.canMoveGap(RetoAtascoBoard.RIGHT))
-			actions.add(RetoAtascoBoard.RIGHT);
-
+		int numVehicles = state.getNumVehicles();
+		List<Action> actions = new ArrayList<>(2*numVehicles);
+		for (int i = 0; i < numVehicles; i++) {
+			boolean[] movements = state.canMoveVehicle(i);
+			if (movements[state.FORWARD_INDEX])
+				actions.add(new AtascoAction(AtascoAction.FORWARD, i));
+			if (movements[state.BACKWARD_INDEX])
+				actions.add(new AtascoAction(AtascoAction.BACKWARDS, i));
+		}
 		return actions;
 	}
-
-	public static RetoAtascoBoard getResult(RetoAtascoBoard state, Action action) {
+	
+	public static RetoAtascoBoard getResult(RetoAtascoBoard state, AtascoAction action) {
 		RetoAtascoBoard result = new RetoAtascoBoard(state);
-
-		if (RetoAtascoBoard.UP.equals(action) && state.canMoveGap(RetoAtascoBoard.UP))
-			result.moveGapUp();
-		else if (RetoAtascoBoard.DOWN.equals(action) && state.canMoveGap(RetoAtascoBoard.DOWN))
-			result.moveGapDown();
-		else if (RetoAtascoBoard.LEFT.equals(action) && state.canMoveGap(RetoAtascoBoard.LEFT))
-			result.moveGapLeft();
-		else if (RetoAtascoBoard.RIGHT.equals(action) && state.canMoveGap(RetoAtascoBoard.RIGHT))
-			result.moveGapRight();
-		return result;
+		
+		if (Objects.equals(action.getName(), AtascoAction.FORWARD))
+			result.moveVehicleForward(action.getId());
+		else if (Objects.equals(action.getName(), AtascoAction.BACKWARDS))
+			result.moveVehicleBackwards(action.getId());
+		// if action is not understood or is a NoOp
+        // the result will be the current state.
+        return result;
 	}
-
+	
+	 public static boolean testGoal(RetoAtascoBoard state) {
+		 return state.getValueAt(state.getExit()).isRedCar();
+	 }
+/*
 	public static ToDoubleFunction<Node<RetoAtascoBoard, Action>> createManhattanHeuristicFunction() {
 		return new ManhattanHeuristicFunction();
 	}
