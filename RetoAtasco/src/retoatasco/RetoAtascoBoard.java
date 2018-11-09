@@ -4,7 +4,7 @@ import retoatasco.coordinate.*;
 
 /**
  * @author Carlos Moreno Morera
- * @author Pablo Martín Huertas
+ * @author Pablo MartÃ­n Huertas
  */
 
 public class RetoAtascoBoard {
@@ -20,8 +20,8 @@ public class RetoAtascoBoard {
 	protected static int numColumns;
 	
 	/*
-	 * Entiendo que si queremos delegar la construcción en sus subclases se debe dejar
-	 * vacío este constructor.
+	 * Entiendo que si queremos delegar la construcciÃ³n en sus subclases se debe dejar
+	 * vacÃ­o este constructor.
 	 */
 	public RetoAtascoBoard() {
 		 
@@ -144,14 +144,21 @@ public class RetoAtascoBoard {
 		}
 		return result;
 	}
-
-	@Override
-	public String toString() {
-		return state[0] + " " + state[1] + " " + state[2] + "\n"
-				+ state[3] + " " + state[4] + " " + state[5] + " " + "\n"
-				+ state[6] + " " + state[7] + " " + state[8];
-	}
 */
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < numRows; i++) {
+			sb.append("|");
+			for (int j = 0; j < numColumns; j++) {
+				if (this.getValueAt(i,j).isEmpty()) sb.append("   |");
+				else if (this.getValueAt(i,j).isRedCar()) sb.append(" X |");
+				else sb.append(" " + this.getValueAt(i,j).getId() + " |");
+			}
+			sb.append("\n");
+		}
+		return sb.toString();
+	}
+
 
 	protected void setValue(Coordinate c, Square s) {
 		int absPos = getAbsPosition(c.getRow(), c.getColumn());
