@@ -27,7 +27,10 @@ public class RetoAtascoBoard {
 		 numColumns = nColumns;
 		//Create an empty board
 		for (int i = 0; i < numRows*numColumns; i++)
-			board[i].setEmpty();
+			board[i] = new Square();
+		//Initialize the vehicles array
+		for (int i = 0; i < numVehicles; i++)
+			vehicles[i] = new Coordinate();
 	}
 	
 	
@@ -36,9 +39,11 @@ public class RetoAtascoBoard {
 		board = new Square[b.length];
 		vehicles = new Coordinate[numVehicles];
 		for (int i= 0; i < b.length; ++i) {
+			board[i] = new Square();
 			board[i].setId(b[i].getId());
 			board[i].setPiece(b[i].getPiece());
 			if (!b[i].isEmpty()) {
+				vehicles[b[i].getId()] = new Coordinate();
 				vehicles[b[i].getId()].setRow(getRowCoord(i));
 				vehicles[b[i].getId()].setColumn(getColCoord(i));
 			}
