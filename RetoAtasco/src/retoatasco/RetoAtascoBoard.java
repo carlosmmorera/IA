@@ -10,27 +10,21 @@ import retoatasco.coordinate.*;
 public class RetoAtascoBoard {
 	public final int FORWARD_INDEX = 0;
 	public final int BACKWARD_INDEX = 1;
+	public final int CAR_SIZE = 2;
+	public final int LORRY_SIZE = 3;
 	
-	private static final int BOARD_SIZE = 6;
-	private static final int NUM_CAR = 6;
-	private static final int NUM_LORRY = 2;
-	
-	private static Square[] board;
-	private static Coordinate exit;
-	private static Coordinate[] vehicles;
-	private static int numRows;
-	private static int numColumns;
+	protected static Square[] board;
+	protected static Coordinate exit;
+	protected static Coordinate[] vehicles;
+	protected static int numRows;
+	protected static int numColumns;
 	
 	/*
-	 * En principio no hace falta este constructor, aunque se podría poner como que por
-	 * defecto generara el puzzle propuesto en la práctica.
-	 */ 
-	 public RetoAtascoBoard() {
-		board = new Square[BOARD_SIZE*BOARD_SIZE];
-		exit = new Coordinate();
-		vehicles = new Coordinate[NUM_CAR + NUM_LORRY];
-		numRows = BOARD_SIZE;
-		numColumns = BOARD_SIZE;
+	 * Entiendo que si queremos delegar la construcción en sus subclases se debe dejar
+	 * vacío este constructor.
+	 */
+	public RetoAtascoBoard() {
+		 
 	}
 	
 	
@@ -41,7 +35,7 @@ public class RetoAtascoBoard {
 		for (int i= 0; i < b.length; ++i) {
 			board[i].setId(b[i].getId());
 			board[i].setPiece(b[i].getPiece());
-			if (b[i].getPiece() != Piece.EMPTY) {
+			if (!b[i].isEmpty()) {
 				vehicles[b[i].getId()].setRow(getRowCoord(i));
 				vehicles[b[i].getId()].setColumn(getColCoord(i));
 			}
@@ -141,40 +135,6 @@ public class RetoAtascoBoard {
 		return false;
 	}
 /*
-	public List<XYLocation> getPositions() {
-		ArrayList<XYLocation> retVal = new ArrayList<>();
-		for (int i = 0; i < 9; i++) {
-			int absPos = getPositionOf(i);
-			XYLocation loc = new XYLocation(getXCoord(absPos),
-					getYCoord(absPos));
-			retVal.add(loc);
-
-		}
-		return retVal;
-	}
-
-	public void setBoard(List<XYLocation> locs) {
-		int count = 0;
-		for (XYLocation loc : locs) {
-			this.setValue(loc.getXCoOrdinate(), loc.getYCoOrdinate(), count);
-			count = count + 1;
-		}
-	}
-
-	public boolean canMoveGap(Action where) {
-		boolean retVal = true;
-		int absPos = getPositionOf(0);
-		if (where.equals(LEFT))
-			retVal = (getYCoord(absPos) != 0);
-		else if (where.equals(RIGHT))
-			retVal = (getYCoord(absPos) != 2);
-		else if (where.equals(UP))
-			retVal = (getXCoord(absPos) != 0);
-		else if (where.equals(DOWN))
-			retVal = (getXCoord(absPos) != 2);
-		return retVal;
-	}
-
 	@Override
 	public int hashCode() {
 		int result = 17;
@@ -193,22 +153,20 @@ public class RetoAtascoBoard {
 	}
 */
 
+	protected void setValue(Coordinate c, Square s) {
+		int absPos = getAbsPosition(c.getRow(), c.getColumn());
+		board[absPos].setPiece(s.getPiece());
+		board[absPos].setId(s.getId());
+	}
+	
 	//
 	// PRIVATE METHODS
 	//
 	
-	/**
-	 * Note: The graphic representation maps x values on row numbers (x-axis in
-	 * vertical direction).
-	 */
 	private int getRowCoord(int absPos) {
 		return absPos / numRows;
 	}
 
-	/**
-	 * Note: The graphic representation maps y values on column numbers (y-axis
-	 * in horizontal direction).
-	 */
 	private int getColCoord(int absPos) {
 		return absPos % numRows;
 	}
@@ -221,26 +179,8 @@ public class RetoAtascoBoard {
 		return board[getAbsPosition(x, y)];
 	}
 	
-	private void setValue(Coordinate c, Square s) {
-		int absPos = getAbsPosition(c.getRow(), c.getColumn());
-		board[absPos].setPiece(s.getPiece());
-		board[absPos].setId(s.getId());
-	}
-	
 	private void setEmpty(Coordinate c) {
 		int absPos = getAbsPosition(c.getRow(), c.getColumn());
 		board[absPos].setEmpty();
 	}
-/*
-	private int getGapPosition() {
-		return getPositionOf(0);
-	}
-
-	private int getPositionOf(int val) {
-		for (int i = 0; i < 9; i++)
-			if (state[i] == val)
-				return i;
-		return -1;
-	}
-*/
 }
