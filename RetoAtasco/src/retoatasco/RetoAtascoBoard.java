@@ -13,11 +13,11 @@ public class RetoAtascoBoard {
 	public final int CAR_SIZE = 2;
 	public final int LORRY_SIZE = 3;
 	
-	private static Square[] board;
-	private static Coordinate exit;
-	protected static Coordinate[] vehicles;
-	private static int numRows;
-	private static int numColumns;
+	private Square[] board;
+	private Coordinate exit;
+	protected Coordinate[] vehicles;
+	private int numRows;
+	private int numColumns;
 	
 	public RetoAtascoBoard(int nRows, int nColumns, int numVehicles, Coordinate c) {
 		 board = new Square[nRows * nColumns];
