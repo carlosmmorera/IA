@@ -22,18 +22,8 @@ public class BasicTrafficJam extends RetoAtascoBoard {
 		Coordinate(4,2), new Coordinate(5, 2)}};
 	
 	public BasicTrafficJam() {
-		board = new Square[BOARD_SIZE*BOARD_SIZE];
-		exit = new Coordinate(escape);
-		numRows = BOARD_SIZE;
-		numColumns = BOARD_SIZE;
-		
-		//Create an empty board
-		for (int i = 0; i < BOARD_SIZE*BOARD_SIZE; i++)
-			board[i].setEmpty();
-		
-		vehicles = new Coordinate[NUM_CAR + NUM_LORRY];
+		super(BOARD_SIZE, BOARD_SIZE, NUM_CAR + NUM_LORRY, escape);
 		int index = 0;
-		
 		//Put the cars on board
 		for (int i = 0; i < NUM_CAR; i++) {
 			for (int j = 0; j < CAR_SIZE; j++) 
@@ -43,7 +33,6 @@ public class BasicTrafficJam extends RetoAtascoBoard {
 			vehicles[index].setColumn(cars[i][0].getColumn());
 			index++;
 		}
-		
 		//Put the lorries on board
 		for (int i = 0; i < NUM_LORRY; i++) {
 			for (int j = 0; j < LORRY_SIZE; j++) 

@@ -13,18 +13,21 @@ public class RetoAtascoBoard {
 	public final int CAR_SIZE = 2;
 	public final int LORRY_SIZE = 3;
 	
-	protected static Square[] board;
-	protected static Coordinate exit;
+	private static Square[] board;
+	private static Coordinate exit;
 	protected static Coordinate[] vehicles;
-	protected static int numRows;
-	protected static int numColumns;
+	private static int numRows;
+	private static int numColumns;
 	
-	/*
-	 * Entiendo que si queremos delegar la construcción en sus subclases se debe dejar
-	 * vacío este constructor.
-	 */
-	public RetoAtascoBoard() {
-		 
+	public RetoAtascoBoard(int nRows, int nColumns, int numVehicles, Coordinate c) {
+		 board = new Square[nRows * nColumns];
+		 exit = new Coordinate(c);
+		 vehicles = new Coordinate[numVehicles];
+		 numRows = nRows;
+		 numColumns = nColumns;
+		//Create an empty board
+		for (int i = 0; i < numRows*numColumns; i++)
+			board[i].setEmpty();
 	}
 	
 	
@@ -134,17 +137,17 @@ public class RetoAtascoBoard {
 		}
 		return false;
 	}
-/*
-	@Override
+
 	public int hashCode() {
 		int result = 17;
-		for (int i = 0; i < 8; i++) {
-			int position = this.getPositionOf(i);
-			result = 37 * result + position;
+		for (int i = 0; i < vehicles.length; i++) {
+			Vehicle v = new Vehicle(this, vehicles[i]);
+			result = 37 * result + v.getFirstCoordinate().getRow()*3 + v.getFirstCoordinate().getColumn()*5
+					  + v.getLastCoordinate().getRow()*7 + v.getLastCoordinate().getColumn()*11;
 		}
 		return result;
 	}
-*/
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < numRows; i++) {

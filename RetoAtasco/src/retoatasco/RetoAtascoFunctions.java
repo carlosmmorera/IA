@@ -45,8 +45,8 @@ public class RetoAtascoFunctions {
 	}
 	 
 	public static ToDoubleFunction<Node/*<RetoAtascoBoard, AtascoAction>*/> 
-		createStraightLineHeuristicFunction(){
-		return new StraightLineHeuristicFunction();
+		createAbsoluteDistanceHeuristicFunction(){
+		return new AbsoluteDistanceHeuristicFunction();
 	}
 	
 	public static ToDoubleFunction<Node/*<RetoAtascoBoard, AtascoAction>*/>
@@ -54,7 +54,7 @@ public class RetoAtascoFunctions {
 		return new VehiclesPerLineHeuristicFunction();
 	}
 	 
-	private static class StraightLineHeuristicFunction implements
+	private static class AbsoluteDistanceHeuristicFunction implements
 		ToDoubleFunction<Node/*<RetoAtascoBoard, AtascoAction>*/> {
 		public double applyAsDouble(Node/*<RetoAtascoBoard, AtascoAction>*/ node) {
 			RetoAtascoBoard board = (RetoAtascoBoard) node.getState();
