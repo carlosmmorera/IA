@@ -3,10 +3,8 @@ package retoatasco.examples;
 import retoatasco.*;
 import retoatasco.coordinate.Coordinate;
 
-public class BasicTrafficJam extends RetoAtascoBoard {
+public class BasicTrafficJam extends ExtendableBoard {
 	private static final int BOARD_SIZE = 6;
-	private static final int NUM_CAR = 6;
-	private static final int NUM_LORRY = 2;
 	
 	private static final Coordinate escape = new Coordinate(2, 5);
 	
@@ -22,25 +20,6 @@ public class BasicTrafficJam extends RetoAtascoBoard {
 		Coordinate(4,2), new Coordinate(5, 2)}};
 	
 	public BasicTrafficJam() {
-		super(BOARD_SIZE, BOARD_SIZE, NUM_CAR + NUM_LORRY, escape);
-		int index = 0;
-		//Put the cars on board
-		for (int i = 0; i < NUM_CAR; i++) {
-			for (int j = 0; j < CAR_SIZE; j++) 
-				setValue(cars[i][j], new Square(Piece.CAR, index));
-			//Include the car in vehicles array
-			vehicles[index].setRow(cars[i][0].getRow());
-			vehicles[index].setColumn(cars[i][0].getColumn());
-			index++;
-		}
-		//Put the lorries on board
-		for (int i = 0; i < NUM_LORRY; i++) {
-			for (int j = 0; j < LORRY_SIZE; j++) 
-				setValue(lorries[i][j], new Square(Piece.LORRY, index));
-			//Include the lorry in vehicles array
-			vehicles[index].setRow(lorries[i][0].getRow());
-			vehicles[index].setColumn(lorries[i][0].getColumn());
-			index++;
-		}
+		super(BOARD_SIZE, BOARD_SIZE, escape, cars, lorries);
 	}
 }

@@ -10,8 +10,6 @@ import retoatasco.coordinate.*;
 public class RetoAtascoBoard {
 	public final int FORWARD_INDEX = 0;
 	public final int BACKWARD_INDEX = 1;
-	public final int CAR_SIZE = 2;
-	public final int LORRY_SIZE = 3;
 	
 	private Square[] board;
 	private Coordinate exit;
