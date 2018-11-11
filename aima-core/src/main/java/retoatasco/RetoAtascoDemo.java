@@ -2,6 +2,8 @@ package retoatasco;
 
 import java.util.List;
 import java.util.Properties;
+import java.util.Scanner;
+
 import aima.core.agent.Action;
 import aima.core.search.agent.SearchAgent;
 import aima.core.search.framework.SearchForActions;
@@ -16,11 +18,32 @@ import retoatasco.examples.BasicTrafficJam;
 
 public class RetoAtascoDemo {
 	public static void main(String[] args) {
-		atascoDepthFirstSearch();
-		atascoBreadthFirstSearch();
+		Scanner reader = new Scanner(System.in);
+		int option = 1;
+		while (option != 0) {
+			System.out.println("What type of search do you want to apply?:");
+			System.out.println("1.- DFS with Graph Search.");
+			System.out.println("2.- DFS with Tree Search.");
+			System.out.println("3.- BFS with Graph Search.");
+			System.out.println("4.- BFS with Tree Search.");
+			System.out.println("0.- Exit.");
+			System.out.print("Introduce the number of your preference: ");
+			option = reader.nextInt();
+			switch(option) {
+				case 1: atascoDepthFirstSearch(true);
+						break;
+				case 2: atascoDepthFirstSearch(false);
+						break;
+				case 3: atascoBreadthFirstSearch(true);
+						break;
+				case 4: atascoBreadthFirstSearch(false);
+						break;
+				default: break;
+			}
+		}
 	}
 	
-	private static void atascoDepthFirstSearch() {
+	private static void atascoDepthFirstSearch(boolean isGraphSearch) {
 		System.out.println("RetoAtascoDemo: DFS --> ");
 		try {
 			Problem<RetoAtascoBoard, AtascoAction> problem = 
@@ -28,7 +51,8 @@ public class RetoAtascoDemo {
 				RetoAtascoFunctions::getActions, RetoAtascoFunctions::getResult,
 				RetoAtascoFunctions::testGoal);
 			SearchForActions<RetoAtascoBoard, AtascoAction> search = 
-					new DepthFirstSearch<>(new GraphSearch<>());
+					new DepthFirstSearch<>(isGraphSearch? new GraphSearch<>()
+							: new TreeSearch<>());
 			SearchAgent<RetoAtascoBoard, AtascoAction> agent = 
 					new SearchAgent<>(problem, search);
 			printActions(agent.getActions());
@@ -39,7 +63,7 @@ public class RetoAtascoDemo {
 		}
 	}
 	
-	private static void atascoBreadthFirstSearch() {
+	private static void atascoBreadthFirstSearch(boolean isGraphSearch) {
 		System.out.println("RetoAtascoDemo: BFS --> ");
 		try {
 			Problem<RetoAtascoBoard, AtascoAction> problem = 
@@ -47,7 +71,8 @@ public class RetoAtascoDemo {
 				RetoAtascoFunctions::getActions, RetoAtascoFunctions::getResult,
 				RetoAtascoFunctions::testGoal);
 			SearchForActions<RetoAtascoBoard, AtascoAction> search = 
-					new BreadthFirstSearch<>(new TreeSearch<>());
+					new BreadthFirstSearch<>(isGraphSearch? new GraphSearch<>()
+							: new TreeSearch<>());
 			SearchAgent<RetoAtascoBoard, AtascoAction> agent = 
 					new SearchAgent<>(problem, search);
 			printActions(agent.getActions());
