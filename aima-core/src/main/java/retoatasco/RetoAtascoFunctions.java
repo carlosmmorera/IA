@@ -95,7 +95,7 @@ public class RetoAtascoFunctions {
 			int lastId = b.getValueAt(aux).getId();
 			if (!b.isEmpty(aux))
 				numVehicles++;
-			while (!b.isEmpty(aux)) {
+			while (!b.isEmpty(aux) && aux.canMove(d, b.getNumRows(), b.getNumColumns())) {
 				aux = aux.applyMovement(d);
 				if (!b.isEmpty(aux) && b.getValueAt(aux).getId() != lastId) {
 					numVehicles++;
@@ -109,7 +109,7 @@ public class RetoAtascoFunctions {
 			lastId = b.getValueAt(c).getId();
 			if (!b.isEmpty(aux))
 				numVehiclesOp++;
-			while (!b.isEmpty(c)) {
+			while (!b.isEmpty(c) && c.canMove(d, b.getNumRows(), b.getNumColumns())) {
 				c = c.applyMovement(d);
 				if (!b.isEmpty(c) && b.getValueAt(c).getId() != lastId) {
 					numVehiclesOp++;
