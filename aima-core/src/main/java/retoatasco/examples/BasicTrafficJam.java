@@ -3,6 +3,11 @@ package retoatasco.examples;
 import retoatasco.board.ExtendableBoard;
 import retoatasco.coordinate.Coordinate;
 
+/**
+ * Class which creates the given board example
+ * @author Carlos Moreno Morera
+ *
+ */
 public class BasicTrafficJam extends ExtendableBoard {
 	private static final int BOARD_SIZE = 6;
 	
@@ -19,6 +24,9 @@ public class BasicTrafficJam extends ExtendableBoard {
 		Coordinate(1, 5), new Coordinate(2,5)}, {new Coordinate(3, 2), new 
 		Coordinate(4,2), new Coordinate(5, 2)}};
 	
+	/**
+	 * Constructor
+	 */
 	public BasicTrafficJam() {
 		super(BOARD_SIZE, BOARD_SIZE, escape, cars, lorries);
 	}

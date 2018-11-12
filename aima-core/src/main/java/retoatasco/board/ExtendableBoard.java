@@ -2,10 +2,23 @@ package retoatasco.board;
 
 import retoatasco.coordinate.Coordinate;
 
+/**
+ * Class which allows the user to create their own board
+ * @author Carlos Moreno Morera
+ *
+ */
 public class ExtendableBoard extends RetoAtascoBoard {
 	public final static int CAR_SIZE = 2;
 	public final static int LORRY_SIZE = 3;
 	
+	/**
+	 * Construct the board (the initial state of the problem)
+	 * @param numRows number of rows of the board
+	 * @param numCols number of columns of the board
+	 * @param escape coordinate of the exit
+	 * @param cars coordinates of the cars on the board
+	 * @param lorries coordinates of the lorries on the board
+	 */
 	public ExtendableBoard(int numRows, int numCols, Coordinate escape, Coordinate[][] 
 			cars, Coordinate[][] lorries){
 		super(numRows, numCols, cars.length + lorries.length, escape);

@@ -23,16 +23,27 @@ import retoatasco.board.RetoAtascoBoard;
 import retoatasco.coordinate.Coordinate;
 import retoatasco.examples.BasicTrafficJam;
 
+/**
+ * Class used for the execution of the traffic jam problem.
+ * @author Carlos Moreno Morera
+ *
+ */
 public class RetoAtascoDemo {
+	/**
+	 * Main function
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Scanner reader = new Scanner(System.in);
 		int searchOption = 1, menuOption = 1;
 		while (menuOption != 0) {
+			//Shows the different options
 			System.out.println("\nWhich option do you prefer?");
 			System.out.println("1.- Use the preset example.");
 			System.out.println("2.- Create my own example.");
 			System.out.println("0.- Exit.");
 			System.out.print("Introduce the number of your preference: ");
+			//Select an option
 			menuOption = reader.nextInt();
 			ExtendableBoard b;
 			if (menuOption == 2)
@@ -43,6 +54,7 @@ public class RetoAtascoDemo {
 				System.out.println("The example board is the next one:");
 				System.out.println(b.toString());
 				searchOption = 1;
+				//Selection of the type of search
 				while (searchOption != 0) {
 					printSearchOption();
 					System.out.print("Introduce the number of your preference: ");
@@ -53,12 +65,17 @@ public class RetoAtascoDemo {
 		}
 	}
 	
+	/**
+	 * Ask the user to create a board for the traffic jam problem
+	 * @return the board created
+	 */
 	private static ExtendableBoard createExample() {
 		Scanner r = new Scanner(System.in);
 		System.out.println("How many rows does the board have? ");
 		int numRows = r.nextInt();
 		System.out.println("How many columns does the board have? ");
 		int numColumns = r.nextInt();
+		
 		System.out.println("Now, I am going to ask you about where the exit and the"
 				+ " vehicles are. You have to ask me in coordinates (starting with 0"
 				+ " and ending with " + (numRows - 1) + " in the rows case, and "
@@ -68,6 +85,7 @@ public class RetoAtascoDemo {
 		int row = r.nextInt();
 		System.out.println("In which column is the exit? ");
 		int column = r.nextInt();
+		
 		Coordinate escape = new Coordinate(row, column);
 		System.out.println("How many cars are there (including the red one)? ");
 		int num = r.nextInt();
@@ -92,6 +110,7 @@ public class RetoAtascoDemo {
 				cars[i][j] = new Coordinate(row, column);
 			}
 		}
+		
 		System.out.println("How many lorries are there? ");
 		num = r.nextInt();
 		Coordinate lorries[][] = new Coordinate[num][ExtendableBoard.LORRY_SIZE];
@@ -111,6 +130,11 @@ public class RetoAtascoDemo {
 		return new ExtendableBoard(numRows, numColumns, escape, cars, lorries);
 	}
 	
+	/**
+	 * Execute a Depth First Search on the board given
+	 * @param isGraphSearch determines whether or not a repeat control is to be used
+	 * @param b board given for the search
+	 */
 	private static void atascoDepthFirstSearch(boolean isGraphSearch, ExtendableBoard b) {
 		System.out.println("RetoAtascoDemo: DFS --> ");
 		try {
@@ -131,6 +155,11 @@ public class RetoAtascoDemo {
 		}
 	}
 	
+	/**
+	 * Execute a Breadth First Search on the board given
+	 * @param isGraphSearch determines whether or not a repeat control is to be used
+	 * @param b board given for the search
+	 */
 	private static void atascoBreadthFirstSearch(boolean isGraphSearch, ExtendableBoard b) {
 		System.out.println("RetoAtascoDemo: BFS --> ");
 		try {
@@ -150,6 +179,13 @@ public class RetoAtascoDemo {
 		}
 	}
 	
+	/**
+	 * Execute a Greedy Best First Search on the board given.
+	 * @param isGraphSearch determines whether or not a repeat control is to be used
+	 * @param useAbsoluteDistanceHeuristic determines which of the two heuristics
+	 * will be used
+	 * @param b board given for the search
+	 */
 	private static void atascoGreedyBestFirstSearch(boolean isGraphSearch, boolean
 			useAbsoluteDistanceHeuristic, ExtendableBoard b) {
 		System.out.println("RetoAtascoDemo: Greedy Best First Search "
@@ -174,6 +210,13 @@ public class RetoAtascoDemo {
 		}
 	}
 	
+	/**
+	 * Execute a A* Search on the board given.
+	 * @param isGraphSearch determines whether or not a repeat control is to be used
+	 * @param useAbsoluteDistanceHeuristic determines which of the two heuristics
+	 * will be used
+	 * @param b board given for the search
+	 */
 	private static void atascoAStarSearch(boolean isGraphSearch, boolean
 			useAbsoluteDistanceHeuristic, ExtendableBoard b) {
 		System.out.println("RetoAtascoDemo: A Star Search "
@@ -198,6 +241,10 @@ public class RetoAtascoDemo {
 		}
 	}
 	
+	/**
+	 * Execute a Depth Limited Search on the board given (by asking the user the limit)
+	 * @param b board given
+	 */
 	private static void atascoDepthLimitedSearch(ExtendableBoard b) {
 		Scanner r = new Scanner(System.in);
 		System.out.println("What depth limit do you want to establish? ");
@@ -219,6 +266,10 @@ public class RetoAtascoDemo {
 		}
 	}
 	
+	/**
+	 * Execute an Iterative Depth Limited Search on the board given
+	 * @param b board given
+	 */
 	private static void atascoIterativeDepthLimitedSearch(ExtendableBoard b) {
 		System.out.println("RetoAtascoDemo: Iterative DLS -->");
 		try {
@@ -237,6 +288,12 @@ public class RetoAtascoDemo {
 		}
 	}
 	
+	/**
+	 * Execute a Hill Climbing Search on the board given
+	 * @param useAbsoluteDistanceHeuristic determines which of the two heuristics 
+	 * will be used
+	 * @param b board given
+	 */
 	private static void atascoHillClimbingSearch(boolean useAbsoluteDistanceHeuristic,
 			ExtendableBoard b) {
 		System.out.println("RetoAtascoDemo: Hill Climbing Search "
@@ -263,10 +320,18 @@ public class RetoAtascoDemo {
 		}
 	}
 	
+	/**
+	 * Print the different actions
+	 * @param actions given
+	 */
 	private static void printActions(List<Action> actions) {
 		actions.forEach(System.out::println);
 	}
 	
+	/**
+	 * Print the properties of a search
+	 * @param properties given
+	 */
 	private static void printInstrumentation(Properties properties) {
 		for (Object o : properties.keySet()) {
 			String key = (String) o;
@@ -275,6 +340,9 @@ public class RetoAtascoDemo {
 		}
 	}
 	
+	/**
+	 * Print the different options of search that the user have
+	 */
 	private static void printSearchOption() {
 		System.out.println("\nWhat type of search do you want to apply?:");
 		System.out.println("1.- DFS with Graph Search.");
@@ -306,6 +374,11 @@ public class RetoAtascoDemo {
 		System.out.println("0.- Exit.");
 	}
 	
+	/**
+	 * Execute the selected search on the board given
+	 * @param option selected by the user
+	 * @param b board given
+	 */
 	private static void executeChosenOption(int option, ExtendableBoard b) {
 		switch(option) {
 		case 1: atascoDepthFirstSearch(true, b);
