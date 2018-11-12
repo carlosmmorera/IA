@@ -3,8 +3,8 @@ package retoatasco.board;
 import retoatasco.coordinate.Coordinate;
 
 public class ExtendableBoard extends RetoAtascoBoard {
-	public final int CAR_SIZE = 2;
-	public final int LORRY_SIZE = 3;
+	public final static int CAR_SIZE = 2;
+	public final static int LORRY_SIZE = 3;
 	
 	public ExtendableBoard(int numRows, int numCols, Coordinate escape, Coordinate[][] 
 			cars, Coordinate[][] lorries){

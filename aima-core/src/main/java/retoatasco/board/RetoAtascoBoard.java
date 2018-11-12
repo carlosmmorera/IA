@@ -180,15 +180,15 @@ public class RetoAtascoBoard {
 	//
 	
 	private int getRowCoord(int absPos) {
-		return absPos / numRows;
+		return absPos / numColumns;
 	}
 
 	private int getColCoord(int absPos) {
-		return absPos % numRows;
+		return absPos % numColumns;
 	}
 
 	private int getAbsPosition(int x, int y) {
-		return x * numRows + y;
+		return x * numColumns + y;
 	}
 
 	private Square getValueAt(int x, int y) {

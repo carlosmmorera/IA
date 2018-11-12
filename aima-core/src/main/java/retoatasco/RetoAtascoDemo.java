@@ -18,26 +18,104 @@ import aima.core.search.uninformed.BreadthFirstSearch;
 import aima.core.search.uninformed.DepthFirstSearch;
 import aima.core.search.uninformed.DepthLimitedSearch;
 import aima.core.search.uninformed.IterativeDeepeningSearch;
+import retoatasco.board.ExtendableBoard;
 import retoatasco.board.RetoAtascoBoard;
+import retoatasco.coordinate.Coordinate;
 import retoatasco.examples.BasicTrafficJam;
 
 public class RetoAtascoDemo {
 	public static void main(String[] args) {
 		Scanner reader = new Scanner(System.in);
-		int option = 1;
-		while (option != 0) {
-			printSearchOption();
+		int searchOption = 1, menuOption = 1;
+		while (menuOption != 0) {
+			System.out.println("\nWhich option do you prefer?");
+			System.out.println("1.- Use the preset example.");
+			System.out.println("2.- Create my own example.");
+			System.out.println("0.- Exit.");
 			System.out.print("Introduce the number of your preference: ");
-			option = reader.nextInt();
-			executeChosenOption(option);
+			menuOption = reader.nextInt();
+			ExtendableBoard b;
+			if (menuOption == 2)
+				b = createExample();
+			else
+				b = new BasicTrafficJam();
+			if (menuOption != 0) {
+				System.out.println("The example board is the next one:");
+				System.out.println(b.toString());
+				searchOption = 1;
+				while (searchOption != 0) {
+					printSearchOption();
+					System.out.print("Introduce the number of your preference: ");
+					searchOption = reader.nextInt();
+					executeChosenOption(searchOption, b);
+				}
+			}
 		}
 	}
 	
-	private static void atascoDepthFirstSearch(boolean isGraphSearch) {
+	private static ExtendableBoard createExample() {
+		Scanner r = new Scanner(System.in);
+		System.out.println("How many rows does the board have? ");
+		int numRows = r.nextInt();
+		System.out.println("How many columns does the board have? ");
+		int numColumns = r.nextInt();
+		System.out.println("Now, I am going to ask you about where the exit and the"
+				+ " vehicles are. You have to ask me in coordinates (starting with 0"
+				+ " and ending with " + (numRows - 1) + " in the rows case, and "
+				+ "ending with " + (numColumns - 1) + " in the columns case). The first "
+				+ "row is the top one and the first column the left one.");
+		System.out.println("In which row is the exit? ");
+		int row = r.nextInt();
+		System.out.println("In which column is the exit? ");
+		int column = r.nextInt();
+		Coordinate escape = new Coordinate(row, column);
+		System.out.println("How many cars are there (including the red one)? ");
+		int num = r.nextInt();
+		Coordinate cars[][] = new Coordinate[num][ExtendableBoard.CAR_SIZE];
+		System.out.println("Now, you have to give me " + ExtendableBoard.CAR_SIZE +
+				" coordinates of each car.");
+		for (int i = 0; i < ExtendableBoard.CAR_SIZE; i++) {
+			System.out.println("In which row is one of the parts of the red car? ");
+			row = r.nextInt();
+			System.out.println("In which column is that part of the red car? ");
+			column = r.nextInt();
+			cars[0][i] = new Coordinate(row, column);
+		}
+		for (int i = 1; i < num; i++) {
+			for (int j = 0; j < ExtendableBoard.CAR_SIZE; j++) {
+				System.out.println("In which row is one of the parts of the car number "
+						+ i + "? ");
+				row = r.nextInt();
+				System.out.println("In which column is one of the parts of the car number "
+						+ i + "? ");
+				column = r.nextInt();
+				cars[i][j] = new Coordinate(row, column);
+			}
+		}
+		System.out.println("How many lorries are there? ");
+		num = r.nextInt();
+		Coordinate lorries[][] = new Coordinate[num][ExtendableBoard.LORRY_SIZE];
+		System.out.println("Now, you have to give me " + ExtendableBoard.LORRY_SIZE +
+				" coordinates of each lorry.");
+		for (int i = 0; i < num ; i++) {
+			for (int j=0; j < ExtendableBoard.LORRY_SIZE; j++) {
+				System.out.println("In which row is one of the parts of the lorry number "
+						+ (i+1) + "? ");
+				row = r.nextInt();
+				System.out.println("In which column is one of the parts of the lorry number "
+						+ (i+1) + "? ");
+				column = r.nextInt();
+				lorries[i][j] = new Coordinate(row, column);
+			}
+		}
+		return new ExtendableBoard(numRows, numColumns, escape, cars, lorries);
+	}
+	
+	private static void atascoDepthFirstSearch(boolean isGraphSearch, ExtendableBoard b) {
 		System.out.println("RetoAtascoDemo: DFS --> ");
 		try {
 			Problem<RetoAtascoBoard, AtascoAction> problem = 
-				new GeneralProblem<RetoAtascoBoard, AtascoAction> (new BasicTrafficJam(),
+				new GeneralProblem<RetoAtascoBoard, AtascoAction> (b,
 				RetoAtascoFunctions::getActions, RetoAtascoFunctions::getResult,
 				RetoAtascoFunctions::testGoal);
 			SearchForActions<RetoAtascoBoard, AtascoAction> search = 
@@ -53,11 +131,11 @@ public class RetoAtascoDemo {
 		}
 	}
 	
-	private static void atascoBreadthFirstSearch(boolean isGraphSearch) {
+	private static void atascoBreadthFirstSearch(boolean isGraphSearch, ExtendableBoard b) {
 		System.out.println("RetoAtascoDemo: BFS --> ");
 		try {
 			Problem<RetoAtascoBoard, AtascoAction> problem = 
-				new GeneralProblem<RetoAtascoBoard, AtascoAction> (new BasicTrafficJam(),
+				new GeneralProblem<RetoAtascoBoard, AtascoAction> (b,
 				RetoAtascoFunctions::getActions, RetoAtascoFunctions::getResult,
 				RetoAtascoFunctions::testGoal);
 			SearchForActions<RetoAtascoBoard, AtascoAction> search = 
@@ -73,13 +151,13 @@ public class RetoAtascoDemo {
 	}
 	
 	private static void atascoGreedyBestFirstSearch(boolean isGraphSearch, boolean
-			useAbsoluteDistanceHeuristic) {
+			useAbsoluteDistanceHeuristic, ExtendableBoard b) {
 		System.out.println("RetoAtascoDemo: Greedy Best First Search "
 				+ (useAbsoluteDistanceHeuristic? "(AbsoluteDistanceHeursitic)" : 
 				"(Number of vehicles in each line Heuristic)") +"-->");
 		try {
 			Problem<RetoAtascoBoard, AtascoAction> problem = 
-					new GeneralProblem<RetoAtascoBoard, AtascoAction> (new BasicTrafficJam(),
+					new GeneralProblem<RetoAtascoBoard, AtascoAction> (b,
 					RetoAtascoFunctions::getActions, RetoAtascoFunctions::getResult,
 					RetoAtascoFunctions::testGoal);
 			SearchForActions<RetoAtascoBoard, AtascoAction> search = 
@@ -97,13 +175,13 @@ public class RetoAtascoDemo {
 	}
 	
 	private static void atascoAStarSearch(boolean isGraphSearch, boolean
-			useAbsoluteDistanceHeuristic) {
+			useAbsoluteDistanceHeuristic, ExtendableBoard b) {
 		System.out.println("RetoAtascoDemo: A Star Search "
 				+ (useAbsoluteDistanceHeuristic? "(AbsoluteDistanceHeursitic)" : 
 				"(Number of vehicles in each line Heuristic)") +"-->");
 		try {
 			Problem<RetoAtascoBoard, AtascoAction> problem = 
-					new GeneralProblem<RetoAtascoBoard, AtascoAction> (new BasicTrafficJam(),
+					new GeneralProblem<RetoAtascoBoard, AtascoAction> (b,
 					RetoAtascoFunctions::getActions, RetoAtascoFunctions::getResult,
 					RetoAtascoFunctions::testGoal);
 			SearchForActions<RetoAtascoBoard, AtascoAction> search = new AStarSearch<>
@@ -120,14 +198,14 @@ public class RetoAtascoDemo {
 		}
 	}
 	
-	private static void atascoDepthLimitedSearch() {
+	private static void atascoDepthLimitedSearch(ExtendableBoard b) {
 		Scanner r = new Scanner(System.in);
-		System.out.println("What depth limit do you want to establish?");
+		System.out.println("What depth limit do you want to establish? ");
 		int depth = r.nextInt();
 		System.out.println("RetoAtascoDemo: recursive DLS (" + depth + ") -->");
 		try {
 			Problem<RetoAtascoBoard, AtascoAction> problem = 
-					new GeneralProblem<RetoAtascoBoard, AtascoAction> (new BasicTrafficJam(),
+					new GeneralProblem<RetoAtascoBoard, AtascoAction> (b,
 					RetoAtascoFunctions::getActions, RetoAtascoFunctions::getResult,
 					RetoAtascoFunctions::testGoal);
 			SearchForActions<RetoAtascoBoard, AtascoAction> search = 
@@ -141,11 +219,11 @@ public class RetoAtascoDemo {
 		}
 	}
 	
-	private static void atascoIterativeDepthLimitedSearch() {
+	private static void atascoIterativeDepthLimitedSearch(ExtendableBoard b) {
 		System.out.println("RetoAtascoDemo: Iterative DLS -->");
 		try {
 			Problem<RetoAtascoBoard, AtascoAction> problem = 
-					new GeneralProblem<RetoAtascoBoard, AtascoAction> (new BasicTrafficJam(),
+					new GeneralProblem<RetoAtascoBoard, AtascoAction> (b,
 					RetoAtascoFunctions::getActions, RetoAtascoFunctions::getResult,
 					RetoAtascoFunctions::testGoal);
 			SearchForActions<RetoAtascoBoard, AtascoAction> search = 
@@ -159,13 +237,14 @@ public class RetoAtascoDemo {
 		}
 	}
 	
-	private static void atascoHillClimbingSearch(boolean useAbsoluteDistanceHeuristic) {
+	private static void atascoHillClimbingSearch(boolean useAbsoluteDistanceHeuristic,
+			ExtendableBoard b) {
 		System.out.println("RetoAtascoDemo: Hill Climbing Search "
 				+ (useAbsoluteDistanceHeuristic? "(AbsoluteDistanceHeursitic)" : 
 				"(Number of vehicles in each line Heuristic)") +"-->");
 		try {
 			Problem<RetoAtascoBoard, AtascoAction> problem = 
-					new GeneralProblem<RetoAtascoBoard, AtascoAction> (new BasicTrafficJam(),
+					new GeneralProblem<RetoAtascoBoard, AtascoAction> (b,
 					RetoAtascoFunctions::getActions, RetoAtascoFunctions::getResult,
 					RetoAtascoFunctions::testGoal);
 			HillClimbingSearch<RetoAtascoBoard, AtascoAction> search = 
@@ -227,39 +306,39 @@ public class RetoAtascoDemo {
 		System.out.println("0.- Exit.");
 	}
 	
-	private static void executeChosenOption(int option) {
+	private static void executeChosenOption(int option, ExtendableBoard b) {
 		switch(option) {
-		case 1: atascoDepthFirstSearch(true);
+		case 1: atascoDepthFirstSearch(true, b);
 				break;
-		case 2: atascoDepthFirstSearch(false);
+		case 2: atascoDepthFirstSearch(false, b);
 				break;
-		case 3: atascoBreadthFirstSearch(true);
+		case 3: atascoBreadthFirstSearch(true, b);
 				break;
-		case 4: atascoBreadthFirstSearch(false);
+		case 4: atascoBreadthFirstSearch(false, b);
 				break;
-		case 5: atascoGreedyBestFirstSearch(true, true);
+		case 5: atascoGreedyBestFirstSearch(true, true, b);
 				break;
-		case 6: atascoGreedyBestFirstSearch(false, true);
+		case 6: atascoGreedyBestFirstSearch(false, true, b);
 				break;
-		case 7: atascoGreedyBestFirstSearch(true, false);
+		case 7: atascoGreedyBestFirstSearch(true, false, b);
 				break;
-		case 8: atascoGreedyBestFirstSearch(false, false);
+		case 8: atascoGreedyBestFirstSearch(false, false, b);
 				break;
-		case 9: atascoAStarSearch(true, true);
+		case 9: atascoAStarSearch(true, true, b);
 			break;
-		case 10: atascoAStarSearch(false, true);
+		case 10: atascoAStarSearch(false, true, b);
 			break;
-		case 11: atascoAStarSearch(true, false);
+		case 11: atascoAStarSearch(true, false, b);
 			break;
-		case 12: atascoAStarSearch(false, false);
+		case 12: atascoAStarSearch(false, false, b);
 			break;
-		case 13: atascoDepthLimitedSearch();
+		case 13: atascoDepthLimitedSearch(b);
 			break;
-		case 14: atascoIterativeDepthLimitedSearch();
+		case 14: atascoIterativeDepthLimitedSearch(b);
 			break;
-		case 15: atascoHillClimbingSearch(true);
+		case 15: atascoHillClimbingSearch(true, b);
 			break;
-		case 16: atascoHillClimbingSearch(false);
+		case 16: atascoHillClimbingSearch(false, b);
 			break;
 		default: break;
 		}
