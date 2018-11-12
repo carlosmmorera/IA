@@ -15,6 +15,8 @@ import aima.core.search.informed.AStarSearch;
 import aima.core.search.informed.GreedyBestFirstSearch;
 import aima.core.search.uninformed.BreadthFirstSearch;
 import aima.core.search.uninformed.DepthFirstSearch;
+import aima.core.search.uninformed.DepthLimitedSearch;
+import aima.core.search.uninformed.IterativeDeepeningSearch;
 import retoatasco.board.RetoAtascoBoard;
 import retoatasco.examples.BasicTrafficJam;
 
@@ -117,6 +119,45 @@ public class RetoAtascoDemo {
 		}
 	}
 	
+	private static void atascoDepthLimitedSearch() {
+		Scanner r = new Scanner(System.in);
+		System.out.println("What depth limit do you want to establish?");
+		int depth = r.nextInt();
+		System.out.println("RetoAtascoDemo: recursive DLS (" + depth + ") -->");
+		try {
+			Problem<RetoAtascoBoard, AtascoAction> problem = 
+					new GeneralProblem<RetoAtascoBoard, AtascoAction> (new BasicTrafficJam(),
+					RetoAtascoFunctions::getActions, RetoAtascoFunctions::getResult,
+					RetoAtascoFunctions::testGoal);
+			SearchForActions<RetoAtascoBoard, AtascoAction> search = 
+					new DepthLimitedSearch<>(depth);
+			SearchAgent<RetoAtascoBoard, AtascoAction> agent = 
+					new SearchAgent<>(problem, search);
+			printActions(agent.getActions());
+			printInstrumentation(agent.getInstrumentation());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static void atascoIterativeDepthLimitedSearch() {
+		System.out.println("RetoAtascoDemo: Iterative DLS -->");
+		try {
+			Problem<RetoAtascoBoard, AtascoAction> problem = 
+					new GeneralProblem<RetoAtascoBoard, AtascoAction> (new BasicTrafficJam(),
+					RetoAtascoFunctions::getActions, RetoAtascoFunctions::getResult,
+					RetoAtascoFunctions::testGoal);
+			SearchForActions<RetoAtascoBoard, AtascoAction> search = 
+					new IterativeDeepeningSearch<>();
+			SearchAgent<RetoAtascoBoard, AtascoAction> agent =
+					new SearchAgent<>(problem, search);
+			printActions(agent.getActions());
+			printInstrumentation(agent.getInstrumentation());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private static void printActions(List<Action> actions) {
 		actions.forEach(System.out::println);
 	}
@@ -151,6 +192,8 @@ public class RetoAtascoDemo {
 				+ " and the number of vehicles in each line heuristic function.");
 		System.out.println("12.- A* Search with Tree Search"
 				+ " and the number of vehicles in each line heuristic function.");
+		System.out.println("13.- Recursive Depth Limited Search.");
+		System.out.println("14.- Iterative Depth Limited Search.");
 		System.out.println("0.- Exit.");
 	}
 	
@@ -179,6 +222,10 @@ public class RetoAtascoDemo {
 		case 11: atascoAStarSearch(true, false);
 			break;
 		case 12: atascoAStarSearch(false, false);
+			break;
+		case 13: atascoDepthLimitedSearch();
+			break;
+		case 14: atascoIterativeDepthLimitedSearch();
 			break;
 		default: break;
 		}
