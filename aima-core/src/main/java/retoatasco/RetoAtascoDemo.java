@@ -13,6 +13,7 @@ import aima.core.search.framework.qsearch.GraphSearch;
 import aima.core.search.framework.qsearch.TreeSearch;
 import aima.core.search.informed.AStarSearch;
 import aima.core.search.informed.GreedyBestFirstSearch;
+import aima.core.search.local.HillClimbingSearch;
 import aima.core.search.uninformed.BreadthFirstSearch;
 import aima.core.search.uninformed.DepthFirstSearch;
 import aima.core.search.uninformed.DepthLimitedSearch;
@@ -158,6 +159,31 @@ public class RetoAtascoDemo {
 		}
 	}
 	
+	private static void atascoHillClimbingSearch(boolean useAbsoluteDistanceHeuristic) {
+		System.out.println("RetoAtascoDemo: Hill Climbing Search "
+				+ (useAbsoluteDistanceHeuristic? "(AbsoluteDistanceHeursitic)" : 
+				"(Number of vehicles in each line Heuristic)") +"-->");
+		try {
+			Problem<RetoAtascoBoard, AtascoAction> problem = 
+					new GeneralProblem<RetoAtascoBoard, AtascoAction> (new BasicTrafficJam(),
+					RetoAtascoFunctions::getActions, RetoAtascoFunctions::getResult,
+					RetoAtascoFunctions::testGoal);
+			HillClimbingSearch<RetoAtascoBoard, AtascoAction> search = 
+					new HillClimbingSearch<>(useAbsoluteDistanceHeuristic?
+					RetoAtascoFunctions.createAbsoluteDistanceHeuristicFunction()
+					: RetoAtascoFunctions.createVehiclesPerLineHeuristicFunction());
+			SearchAgent<RetoAtascoBoard, AtascoAction> agent = 
+					new SearchAgent<>(problem, search);
+
+			printActions(agent.getActions());
+			System.out.println("Search Outcome=" + search.getOutcome());
+			System.out.println("Final State=\n" + search.getLastSearchState());
+			printInstrumentation(agent.getInstrumentation());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private static void printActions(List<Action> actions) {
 		actions.forEach(System.out::println);
 	}
@@ -194,6 +220,10 @@ public class RetoAtascoDemo {
 				+ " and the number of vehicles in each line heuristic function.");
 		System.out.println("13.- Recursive Depth Limited Search.");
 		System.out.println("14.- Iterative Depth Limited Search.");
+		System.out.println("15.- Hill Climbing Search with the absolute distance"
+				+ " heuristic function.");
+		System.out.println("16.- Hill Climbing Search with the number of vehicles"
+				+ " in each line heuristic function.");
 		System.out.println("0.- Exit.");
 	}
 	
@@ -226,6 +256,10 @@ public class RetoAtascoDemo {
 		case 13: atascoDepthLimitedSearch();
 			break;
 		case 14: atascoIterativeDepthLimitedSearch();
+			break;
+		case 15: atascoHillClimbingSearch(true);
+			break;
+		case 16: atascoHillClimbingSearch(false);
 			break;
 		default: break;
 		}
