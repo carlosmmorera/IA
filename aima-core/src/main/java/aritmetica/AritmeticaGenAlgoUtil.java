@@ -11,7 +11,7 @@ import aima.core.search.local.Individual;
 
 public class AritmeticaGenAlgoUtil {
 	
-	private static final int NUM_SOLUTION = 150;
+	private static final int NUM_SOLUTION = 666;
 	private static final int MAX_DIST = 999-101;
 
 	public static FitnessFunction<Integer> getFitnessFunction() {
@@ -26,7 +26,8 @@ public class AritmeticaGenAlgoUtil {
 	//Los individuos con mayor fitness estan mas cerca del estado objetivo
 	public static class AritmeticaFitnessFunction implements FitnessFunction<Integer>{
 		public double apply(Individual<Integer> individual) {
-			return MAX_DIST - abs(NUM_SOLUTION - getResultForIndividual(individual));
+			if (getResultForIndividual(individual) > MAX_DIST || getResultForIndividual(individual) < 0) return 0;
+			else return MAX_DIST - abs(NUM_SOLUTION - getResultForIndividual(individual));
 		}
 	}
 	
@@ -66,7 +67,7 @@ public class AritmeticaGenAlgoUtil {
 	// '*' = 3 mod 4
 	// '/' = 0 mod 4
 	public static Integer getResultForIndividual(Individual<Integer> individual) {
-		int numNumbers = individual.length();
+		int numNumbers = (individual.length()/2)+1;
 		int partialSolution = individual.getRepresentation().get(0);
 		for (int i = 1; i < numNumbers; i++) {
 			int op = individual.getRepresentation().get(2*(i-1)+1);
@@ -75,12 +76,35 @@ public class AritmeticaGenAlgoUtil {
 			if (number == 11) number = 25;
 			else if (number == 12) number = 50;
 			switch (op) {
-			case 0: partialSolution += number; break;
-			case 1: partialSolution -= number; break;
-			case 2: partialSolution *= number; break;
-			case 3: partialSolution /= number; break;
+			case 1: partialSolution += number; break;
+			case 2: partialSolution -= number; break;
+			case 3: partialSolution *= number; break;
+			case 0: partialSolution /= number; break;
 			}
 		}
 		return partialSolution;
+	}
+	
+	
+	public static String getStringFromIndividual(Individual<Integer> individual) {
+		StringBuilder builder = new StringBuilder();
+		builder.append(individual.getRepresentation().get(0));
+		int numNumbers = (individual.length()/2)+1;
+		for (int i = 1; i < numNumbers; i++) {
+			int op = individual.getRepresentation().get(2*(i-1)+1);
+			op = op % 4;
+			int number = individual.getRepresentation().get(2*i);
+			if (number == 11) number = 25;
+			else if (number == 12) number = 50;
+			switch (op) {
+			case 1: builder.append(" + " + number); break;
+			case 2: builder.append(" - " + number); break;
+			case 3: builder.append(" * " + number); break;
+			case 0: builder.append(" / " + number); break;
+			}
+		}
+		builder.append(" = " + getResultForIndividual(individual));
+		return builder.toString();
+		
 	}
 }
