@@ -7,8 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author Ravi Mohan
- * @author Ruediger Lunde
+ * @author Carlos Moreno Morera
+ * @author Pablo Martín Huertas
  * 
  */
 
@@ -21,8 +21,9 @@ public class AritmeticaDemo {
 		aritmeticaGeneticAlgorithmSearch();
 	}
 
-
-
+	/**
+	 * Execute the genetic algorithm for the arithmetic problem
+	 */
 	private static void aritmeticaGeneticAlgorithmSearch() {
 		System.out.println("\nAritmeticaDemo GeneticAlgorithm  -->");
 		try {
@@ -68,3 +69,4 @@ public class AritmeticaDemo {
 	}
 
 }
+
