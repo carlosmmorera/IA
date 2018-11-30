@@ -16,8 +16,6 @@ import aima.core.search.local.Individual;
 public class AritmeticaGenAlgoUtil {
 	
 	private static final int NUM_SOLUTION = 666;
-	private static final int MAX_DIST = 999-101;
-
 	/**
 	 * Stablish the fitness function of the genetic algorithm
 	 * @return the fitness function
@@ -43,7 +41,7 @@ public class AritmeticaGenAlgoUtil {
 		 * @param individual
 		 */
 		public double apply(Individual<Integer> individual) {
-			if (getResultForIndividual(individual)== NUM_SOLUTION) return 1;
+			if (getResultForIndividual(individual)== NUM_SOLUTION) return 2;
 			else return 1/abs(NUM_SOLUTION - getResultForIndividual(individual));
 		}
 	}
