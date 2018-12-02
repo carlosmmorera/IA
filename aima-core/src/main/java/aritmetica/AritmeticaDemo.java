@@ -25,9 +25,7 @@ public class AritmeticaDemo {
 	 * Execute the genetic algorithm for the arithmetic problem
 	 */
 	private static void aritmeticaGeneticAlgorithmSearch() {
-		int numIterTime = 0;
-		long milisTime = 0;
-		int numIterGoal = 0;
+		long numIterGoal = 0;
 		long milisGoal = 0;
 		
 		for (int k  = 0; k < 10; ++k) {
@@ -45,7 +43,7 @@ public class AritmeticaDemo {
 						AritmeticaGenAlgoUtil.getFiniteAlphabet(), 0.10);
 
 				// Run for a set amount of time
-				Individual<Integer> bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 1000L);
+				/*Individual<Integer> bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 1000L);
 
 				System.out.println("Max Time (1 second) Best Individual=\n" + AritmeticaGenAlgoUtil.getStringFromIndividual(bestIndividual));
 				System.out.println("Operands      = " + numNumbers);
@@ -54,13 +52,10 @@ public class AritmeticaDemo {
 				System.out.println("Is Goal         = " + goalTest.test(bestIndividual));
 				System.out.println("Population Size = " + ga.getPopulationSize());
 				System.out.println("Iterations      = " + ga.getIterations());
-				System.out.println("Took            = " + ga.getTimeInMilliseconds() + "ms.");
-				
-				numIterTime += ga.getIterations();
-				milisTime += ga.getTimeInMilliseconds();
+				System.out.println("Took            = " + ga.getTimeInMilliseconds() + "ms.");*/
 
 				// Run till goal is achieved
-				bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 0L);
+				Individual<Integer> bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 0L);
 
 				System.out.println("");
 				System.out.println("Goal Test Best Individual=\n" + AritmeticaGenAlgoUtil.getStringFromIndividual(bestIndividual));
@@ -69,7 +64,7 @@ public class AritmeticaDemo {
 				System.out.println("Fitness         = " + fitnessFunction.apply(bestIndividual));
 				System.out.println("Is Goal         = " + goalTest.test(bestIndividual));
 				System.out.println("Population Size = " + ga.getPopulationSize());
-				System.out.println("Itertions       = " + ga.getIterations());
+				System.out.println("Iterations       = " + ga.getIterations());
 				System.out.println("Took            = " + ga.getTimeInMilliseconds() + "ms.");
 				
 				numIterGoal = ga.getIterations();
@@ -79,10 +74,8 @@ public class AritmeticaDemo {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Media de iteraciones ejecutado por tiempo: " + (long) numIterTime/10);
-		System.out.println("Tiempo medio ejecutado por tiempo: " + milisTime/10);
-		System.out.println("Media iteraciones ejecutado hasta cumplir goalTest: " + (long) numIterGoal/10);
-		System.out.println("Tiempo medio ejecutado hasta cumplir goalTest: " + milisGoal/10);
+		System.out.println("\n\nMedia iteraciones ejecutado hasta cumplir goalTest: " + (double) numIterGoal/10);
+		System.out.println("Tiempo medio ejecutado hasta cumplir goalTest: " + (double) milisGoal/10);
 	}
 
 }

@@ -15,7 +15,7 @@ import aima.core.search.local.Individual;
  */
 public class AritmeticaGenAlgoUtil {
 	
-	private static final int NUM_SOLUTION = 666;
+	private static final int NUM_SOLUTION = 134;
 	/**
 	 * Stablish the fitness function of the genetic algorithm
 	 * @return the fitness function
