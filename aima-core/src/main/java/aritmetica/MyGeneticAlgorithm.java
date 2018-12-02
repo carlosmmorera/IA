@@ -14,7 +14,7 @@ import aima.core.search.local.Individual;
  * for a non-destructive one.
  * 
  * @author Carlos Moreno Morera
- * @author Pablo Martín Huertas
+ * @author Pablo MartÃ­n Huertas
  *
  * @param <A>
  * 				 the type of the alphabet used in the representation of the
@@ -38,7 +38,7 @@ public class MyGeneticAlgorithm<A> extends GeneticAlgorithm<A> {
 		// new_population <- empty set
 		List<Individual<A>> newPopulation = new ArrayList<Individual<A>>(population.size());
 		// for i = 1 to SIZE(population) do
-		for (int i = 0; i < population.size(); i++) {
+		for (int i = 0; i < population.size()/2; i++) {
 			// x <- RANDOM-SELECTION(population, FITNESS-FN)
 			Individual<A> x = randomSelection(population, fitnessFn);
 			// y <- RANDOM-SELECTION(population, FITNESS-FN)
